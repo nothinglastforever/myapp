@@ -28,7 +28,10 @@ dependencies {
   compile "org.pac4j:pac4j-http:1.8.8"
   compile 'io.ratpack:ratpack-pac4j:1.5.0'  
   
+  compile group: 'org.bouncycastle', name: 'bcprov-jdk15on', version: '1.58'
+  
   runtime "mysql:mysql-connector-java:5.1.42"
+  
   
   testCompile "org.spockframework:spock-core:1.0-groovy-2.4"
 }

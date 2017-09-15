@@ -44,10 +44,14 @@ class DatabaseUsernamePasswordAuthenticator implements UsernamePasswordAuthentic
 			throwsException("Invalid username or password")
 		  }
 	  
-		  def passHash = userRow["PASSWORD"] // <4>
+		  def password = userRow["PASSWORD"] // <4>
+		  
+		  def passwordhash = RSAUtility.encrypt(credentials.password)
 	  
 		  
-		  
+		  if (!password || password != passwordhash) {
+			throwsException("Invalid username or password.")
+		  }
 	  
 		  credentials.userProfile = new HttpProfile(id: credentials.username)
 	
