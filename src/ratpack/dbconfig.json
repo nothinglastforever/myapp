@@ -1,0 +1,7 @@
+{
+  "database": { 
+    "username": "examadmin",
+    "password": "examadmin",
+    "jdbcUrl": "jdbc:mysql://localhost:3306/examdb"    
+  }
+}

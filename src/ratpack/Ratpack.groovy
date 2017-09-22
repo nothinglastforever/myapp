@@ -1,5 +1,5 @@
 import app.DatabaseUsernamePasswordAuthenticator
-
+import com.zaxxer.hikari.HikariConfig
 import org.pac4j.http.client.indirect.FormClient
 
 import org.pac4j.http.profile.creator.AuthenticatorProfileCreator
@@ -21,19 +21,26 @@ import ratpack.service.Service
 import ratpack.service.StartEvent
 
 ratpack {
+	
+  serverConfig {
+	json "dbconfig.json"	
+  } 
+	
+  
+	
   bindings {
     module SessionModule
     module TextTemplateModule // <1>
 	module SqlModule
-	module(HikariModule) { c ->
-	  c.dataSourceClassName = 'com.mysql.jdbc.jdbc2.optional.MysqlDataSource'
-	  c.addDataSourceProperty 'URL', 'jdbc:mysql://localhost:3306/examdb'
-	  c.username = 'examadmin'
-	  c.password = 'examadmin'
-	}
-		
+	
+	
+	//moduleConfig(HikariModule, serverConfig.get("/database", HikariConfig)) //Ratpack 1.5.0 with Hikari 2.6.2 bug. Workaround for this issueWorkaround for this issue to deserialize config to a Properties object and use it to manually construct the HikariConfig like below two lines
+	Properties hikariConfigProperties = serverConfig.get("/database", Properties)
+	moduleConfig(HikariModule, new HikariConfig(hikariConfigProperties))
+	
 	bind(DatabaseUsernamePasswordAuthenticator)
   }
+  
   handlers {
 		  
     def formClient = new FormClient( // <2>
